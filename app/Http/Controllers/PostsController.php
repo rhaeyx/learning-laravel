@@ -101,10 +101,11 @@ class PostsController extends Controller
         ]);
 
         # Create post
-        $post = Post::find($id);
-        $post->title = $request['title'];
-        $post->body = $request['body'];
-        $post->save();
+        Post::find($id)->update($request->all())
+        #$post = Post::find($id);
+        #$post->title = $request['title'];
+        #$post->body = $request['body'];
+        #$post->save();
 
         return redirect('/posts')->with('success', 'Post updated.');
     }
@@ -117,9 +118,9 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::find($id);
-        $post->delete();
-
+        #$post = Post::find($id);
+        #$post->delete();
+        Post::find($id)->delete()
         return redirect('/posts')->with('success', 'Post deleted.');
     }
 }
