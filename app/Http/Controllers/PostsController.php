@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -47,11 +48,16 @@ class PostsController extends Controller
         ]);
 
         # Create post
-        $post = new Post;
-        $post->title = $request['title'];
-        $post->body = $request['body'];
-        $post->user_id = auth()->user()->id;
-        $post->save();
+        # Add the user_id to the $request
+        $request->merge( ['user_id' => Auth::user()->id] );
+        # For each field in request, get it and save it to the table
+        Post::create($request->all());
+        # ^^^ Expanded version of this ^^^
+        #$post = new Post;
+        #$post->title = $request['title'];
+        #$post->body = $request['body'];
+        #$post->user_id = auth()->user()->id;
+        #$post->save();
 
         return redirect('/posts')->with('success', 'Post created.');
     }
